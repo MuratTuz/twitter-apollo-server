@@ -7,12 +7,12 @@ import Tweet from "./models/tweet.js";
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: {
-    User,
-    Tweet,
+  context({req}) {
+    const token = req.headers.authorization;
+    return { token, User, Tweet };
   },
 });
 db();
 server.listen({port:process.env.PORT || 4000}).then(({ url }) => {
-  console.log(`listening on ${url}`);
+  console.log(`🚀 Server ready at ${url}`);
 });

@@ -21,8 +21,9 @@ export const typeDefs = gql`
     createdAt: String
   }
   type Query {
+    getToken(email: String!): Token
     getUsers: [User]!
-    getTweets: [Tweet]
+    getTweets(token: String!): [Tweet]
     getUserTweets(user: ID!): [Tweet]
     deleteTweet(_id: ID): [Tweet]
     getUserLikedTweets(_id: ID): [Tweet]
@@ -33,11 +34,12 @@ export const typeDefs = gql`
   }
   type Token {
     token: String!
-    username: String!
+    email: String!
     _id: ID!
   }
   type Mutation {
     createTweet(
+      token: String!
       user: ID!
       username: String!
       text: String!
