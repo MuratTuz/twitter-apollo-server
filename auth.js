@@ -3,10 +3,10 @@ import jwt from "jsonwebtoken";
 const SECRET = "thisismyuniqesecretkey";
 const expiresIn = "4h";
 
-export const createToken = (email) => {
-  const token = jwt.sign({ email }, SECRET, { expiresIn });
+export const createToken = (username) => {
+  const token = jwt.sign({ username }, SECRET, { expiresIn });
   const _id = Date.now();
-  return { token, email, _id };
+  return { token, username, _id };
 };
 
 export const verifyToken = (token) => {
@@ -18,7 +18,7 @@ export const verifyToken = (token) => {
 };
 
 export const authentication = (next) => (root, args, context) => {
-  if (verifyToken(token)) {
+  if (verifyToken(context.token)) {
     next(root, args, context);
   } else {
     return new Error("Not authorized: Token Error!");

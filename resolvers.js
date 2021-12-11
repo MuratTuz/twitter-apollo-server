@@ -1,16 +1,16 @@
-import { createToken, verifyToken } from "./auth.js";
+import { authentication, createToken, verifyToken } from "./auth.js";
 
 export const resolvers = {
   Query: {
-    getToken: async (_, { email }, { User }) => {
-      const user = await User.find({ email });
-      if (user) return createToken(user[0].email);
-      return "There is no such email";
+    getToken: async (_, { username }, { User }) => {
+      const user = await User.find({ username });
+      if (user) return createToken(user[0].username);
+      return "There is no such user";
     },
-    getUsers: async (_, args, { User }) => {
+    getUsers: authentication(async (_, args, { User }) => {
       const users = await User.find();
       return users;
-    },
+    }),
     getTweets: async (_, { token }, { Tweet }) => {
       if (verifyToken(token)) {
         const tweets = await Tweet.find();

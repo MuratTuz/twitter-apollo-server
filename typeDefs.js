@@ -21,7 +21,7 @@ export const typeDefs = gql`
     createdAt: String
   }
   type Query {
-    getToken(email: String!): Token
+    getToken(username: String!): Token
     getUsers: [User]!
     getTweets(token: String!): [Tweet]
     getUserTweets(user: ID!): [Tweet]
@@ -34,7 +34,7 @@ export const typeDefs = gql`
   }
   type Token {
     token: String!
-    email: String!
+    username: String!
     _id: ID!
   }
   type Mutation {
