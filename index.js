@@ -4,10 +4,15 @@ import { typeDefs } from "./typeDefs.js";
 import { db } from "./db.js";
 import User from "./models/user.js";
 import Tweet from "./models/tweet.js";
+//import { FormatDateDirective } from "./directives.js";
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context({req}) {
+/*   schemaDirectives: {
+    formatDate: FormatDateDirective,
+  }, */
+  context({ req }) {
     const token = req.headers.authorization;
     return { token, User, Tweet };
   },

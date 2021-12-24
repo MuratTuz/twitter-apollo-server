@@ -1,8 +1,11 @@
 import { gql } from "graphql-tag";
+
+/*   directive @formatDate(format: String = "dd MMM yyyy") on FIELD_DEFINITION */
+
 export const typeDefs = gql`
   type User {
     _id: ID
-    username: String!
+    username: String
     email: String!
     password: String!
     tweets: [Tweet]
@@ -21,10 +24,10 @@ export const typeDefs = gql`
     createdAt: String
   }
   type Query {
-    getToken(username: String!): Token
-    getUsers: [User]!
-    getTweets(token: String!): [Tweet]
-    getUserTweets(user: ID!): [Tweet]
+    getToken(email: String!): Token!
+    getUsers: [User]
+    getTweets: [Tweet]
+    getUserTweets(email: String!): [Tweet]
     deleteTweet(_id: ID): [Tweet]
     getUserLikedTweets(_id: ID): [Tweet]
   }
@@ -34,8 +37,6 @@ export const typeDefs = gql`
   }
   type Token {
     token: String!
-    username: String!
-    _id: ID!
   }
   type Mutation {
     createTweet(

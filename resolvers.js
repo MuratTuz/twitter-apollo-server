@@ -2,30 +2,30 @@ import { authentication, createToken, verifyToken } from "./auth.js";
 
 export const resolvers = {
   Query: {
-    getToken: async (_, { username }, { User }) => {
-      const user = await User.find({ username });
-      if (user) return createToken(user[0].username);
-      return "There is no such user";
+    getToken: async (_, { email }, { User }) => {
+      const user = await User.find({ email });
+      if (user) return createToken(user[0].email);
+      return new Error("There is no such user");
     },
-    getUsers: authentication(async (_, args, { User }) => {
+    getUsers: async (_, _args, { User }) => {
       const users = await User.find();
       return users;
-    }),
-    getTweets: async (_, { token }, { Tweet }) => {
-      if (verifyToken(token)) {
-        const tweets = await Tweet.find();
-        return tweets;
-      } else {
-        return "token is missing";
-      }
     },
-    getUserTweets: async (_, { user }, { Tweet }) => {
-      const tweets = await Tweet.find({ user }).populate({
+    getTweets: authentication(async (_, _args, { Tweet }) => {
+      console.log("TWEET ", Tweet);
+      const tweets = await Tweet.find();
+      console.log("tweets ", tweets);
+      return tweets;
+    }),
+    getUserTweets: authentication(async (_, { email }, { Tweet }) => {
+      console.log("here");
+      const tweets = await Tweet.find({ email }).populate({
         path: "user",
         model: "Tweet",
       });
+      console.log("usr tweets ", tweets);
       return tweets;
-    },
+    }),
     getUserLikedTweets: async (_, { _id }, { User }) => {
       const tweets = await User.findById({ _id }).populate("likesTweet");
       return tweets.likesTweet;
